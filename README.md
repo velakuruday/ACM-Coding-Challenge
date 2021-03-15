@@ -42,7 +42,7 @@ For each test case, display its case number followed by the largest number of do
 have at the end of day D + 1 . Follow the format of the sample output.
 
 - Example Input   &nbsp; &nbsp; &nbsp; &nbsp;       Example Output
-- 6 10 20           &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp     Case 1: 44
+- 6 10 20           &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;     Case 1: 44
 
 Output:
 - Case 1: 44 
