@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Mar 13 19:04:56 2021
+Created on Sun Mar 14 09:04:56 2021
 
 @author: Uday Velakur
 """
@@ -95,7 +95,7 @@ class Case:
                
         return max_profit
      
-#method to read the case and machine text file
+#method to read the case and machine list (also sort) from text file
 def CaseList(filename):
     Cases = []
     i = 0
@@ -118,9 +118,9 @@ def CaseList(filename):
     return Cases
                            
 def main():
-    for i,case in enumerate(CaseList("input.txt"), start=1):
+    for i,case in enumerate(CaseList("snapshot_input.txt"), start=1):
         profit = Case(*case).Maximize()
         print("Case %d: %d " %(i,profit))
-
+     
 if __name__== "__main__":
     main()
