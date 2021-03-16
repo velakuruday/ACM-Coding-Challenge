@@ -31,56 +31,54 @@ class Case:
         self.machine = machine_list
         self.Tree = self.BuildTree()
         
-    
-    # buy branch sells machine and buys new machine and returns balance
-    def buyBranch(self, fork, machine):
-        profit = 0
-        salePrice = 0
-        if fork.runningMachine:
-            salePrice = fork.runningMachine.Ri
-            profit = fork.runningMachine.Gi * (machine.Di - fork.Day -1)
-            
-        if machine.Pi <= (fork.Balance + profit + salePrice):
-            return fork.Balance + profit + salePrice - machine.Pi 
-        else: 
-            return fork.Balance 
-    # keep branch keeps the current machine and balance and returns machine
-    def keepBranch(self, fork, machine):
-        try:
-            return fork.Balance + fork.runningMachine.Gi*(machine.Di - fork.Day)
-        except AttributeError:
-            return fork.Balance
-            
-    #build the tree with given case and machine list    
+       
     def BuildTree(self):
         fork = Node()
         fork.Balance = self.C
 
         this_row = [fork]
-        
-        for thisMachine in self.machine:
-            new_row = []
+        if self.N == 0: return this_row
             
+        for i,thisMachine in enumerate(self.machine):
+            new_row = []
+                
             for thisFork in this_row:
                 thisFork.Buy = Node()
                 thisFork.Keep = Node()
                 thisFork.Buy.Day = thisMachine.Di
                 thisFork.Keep.Day = thisMachine.Di
                 
-                #Buy branch
-                thisFork.Buy.Balance = self.buyBranch(thisFork, thisMachine) 
-                if thisFork.Buy.Balance!=thisFork.Balance:
+    
+                profit = 0
+                salePrice = 0
+                if thisFork.runningMachine:
+                    salePrice = thisFork.runningMachine.Ri
+                    profit = thisFork.runningMachine.Gi * (thisMachine.Di - thisFork.Day -1)
+            
+                if thisMachine.Pi <= (thisFork.Balance + profit + salePrice):
+                    thisFork.Buy.Balance = thisFork.Balance + profit + salePrice - thisMachine.Pi 
                     thisFork.Buy.runningMachine = thisMachine
                     new_row.append(thisFork.Buy)
-                    
+                                
                 #Keep branch
-                thisFork.Keep.Balance = self.keepBranch(thisFork, thisMachine)
                 thisFork.Keep.runningMachine = thisFork.runningMachine
+                try:
+                    thisFork.Keep.Balance = thisFork.Balance + thisFork.runningMachine.Gi*(thisMachine.Di - thisFork.Day)
+                except AttributeError:
+                    thisFork.Keep.Balance = thisFork.Balance
                 new_row.append(thisFork.Keep)
-                      
-            this_row = new_row   
-        
+            this_row = new_row
+              
         return this_row
+    
+    # def Check_Profit(self, row):
+    #     running_profits = [thisFork.Balance + thisFork.runningMachine.Gi*(self.C - thisFork.Day) + thisFork.runningMachine.Ri for thisFork in row if thisFork.runningMachine]
+    #     if not running_profits: return [row[-1]] 
+    #     maxprofit = max(running_profits)
+    #     row_profit = [thisFork for thisFork in row if thisFork.runningMachine and thisFork.Balance + thisFork.runningMachine.Gi*(self.C - thisFork.Day) + thisFork.runningMachine.Ri == maxprofit]
+    #     row_profit.append(row[-1])
+    #     return row_profit
+
     
     #maximize the profit in the last row of the tree
     def Maximize(self):
@@ -94,6 +92,7 @@ class Case:
                max_profit = profit
                
         return max_profit
+    
      
 #method to read the case and machine list (also sort) from text file
 def CaseList(filename):
@@ -118,9 +117,9 @@ def CaseList(filename):
     return Cases
                            
 def main():
-    for i,case in enumerate(CaseList("snapshot_input.txt"), start=1):
-        profit = Case(*case).Maximize()
-        print("Case %d: %d " %(i,profit))
-     
+      for i,case in enumerate(CaseList("works.in.txt"), start=1):
+          profit = Case(*case).Maximize()
+          print("Case %d: %d " %(i,profit))
+         
 if __name__== "__main__":
     main()
